@@ -31,7 +31,7 @@ class Agent():
         if proportion_of_honest >= threshold: # Honest majority
             if proposer_strategy == 0: # Honest proposer
                 if self.strategy == 0: # Honest agent, {HH}
-                  reward = 
+                  
                 return self.balance * (1 - self.m) * (0 - self.c_check) + (self.m + (1 - self.m) * (1 - self.x)) * (self.R - self.c_check - self.c_send);
     
   def update_strategy(self, total_r_honest, total_r_byzantine, proportion_of_honest) -> None:
