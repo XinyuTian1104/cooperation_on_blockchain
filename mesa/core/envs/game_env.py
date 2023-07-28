@@ -14,6 +14,7 @@ class BFTblockchainModel():
     self.proportion_of_honest = initial_h;
     # self.initial_u = initial_u;
     self.m = m;
+    self.counter = 0;
   
     super().__init__()
   
@@ -36,6 +37,7 @@ class BFTblockchainModel():
     rewards = [self.agents[i].get_reward(self.proportion_of_honest, self.agents[proposer].strategy, self.v) for i in range(self.num_agent)];
     
     # NEW ROUND: new choice of strategy, update proportion_of_honest
+    self.counter = self.counter + 1;
     # calculate total reward of honest agents
     total_r_honest = sum([rewards[i] for i in range(self.num_agent) if self.agents[i].strategy == 0]);
     # calculate total reward of Byzantine agents
