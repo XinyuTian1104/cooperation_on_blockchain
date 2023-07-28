@@ -2,7 +2,7 @@ from game_agents import Agent
 import random
 
 class BFTblockchainModel():
-  def __init__(self, n, R, c_check, c_send, kappa, v, initial_h, initial_u, m):
+  def __init__(self, n, R, c_check, c_send, kappa, v, initial_h):
     self.num_agent = n;
     self.agents = [];
     self.R = R;
@@ -12,8 +12,6 @@ class BFTblockchainModel():
     self.v = v;
     self.initialH = initial_h;
     self.proportion_of_honest = initial_h;
-    # self.initial_u = initial_u;
-    self.m = m;
     self.counter = 0;
   
     super().__init__()
