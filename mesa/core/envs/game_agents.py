@@ -103,7 +103,6 @@ class Agent():
         else:
             raise ValueError;
     
-    
     return reward
     
   def update_strategy(self, total_r_honest, total_r_byzantine, proportion_of_honest) -> None:
@@ -112,13 +111,13 @@ class Agent():
             For agent i, the probability of being honest is
                 x_i(t+1) = x_i(t) * sum_u_honest / (x_i(t) * sum_u_honest + (1-x_i(t)) * sum_u_byzantine)
             the probability of being Byzantine is 1 - x_i(t+1)
-            where
-                sum_u_honest = p{HH}V_{HH} + p{HB}V_{HB}
-                sum_u_byzantine = p{BH}V_{BH} + p{BB}V_{BB}
     """
-    if random.random() <= proportion_of_honest:
+    probability = (proportion_of_honest * total_r_honest)/(proportion_of_honest * total_r_honest + (1 - proportion_of_honest) * total_r_byzantine);
+    if random.random() <= probability:
       strategy = 0; 
     else:
       strategy = 1;
+
+    return strategy
 
   
