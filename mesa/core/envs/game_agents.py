@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from game_env import BFTblockchainModel
+# from game_env import BFTblockchainModel
 
 class Agent():
 
