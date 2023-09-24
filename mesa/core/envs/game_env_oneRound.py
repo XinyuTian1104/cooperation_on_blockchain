@@ -1,5 +1,6 @@
 from envs.game_agents import Agent
 import random
+import numpy as np
 
 class BFTblockchainModel():
   def __init__(self, n, R, c_check, c_send, kappa, threshold, initial_h):
@@ -52,14 +53,16 @@ class BFTblockchainModel():
     total_r_honest = sum([rewards[i] for i in range(self.num_agent) if self.agents[i].strategy == 0]);
 
     # calculate total reward of Byzantine agents
-    total_r_bynzantine = sum([rewards[i] for i in range(self.num_agent) if self.agents[i].strategy == 1]);
-    print("The total rewards of Honest and Byzantine: ", (total_r_honest, total_r_bynzantine))
+    total_r_byzantine = sum([rewards[i] for i in range(self.num_agent) if self.agents[i].strategy == 1]);
+    print("The total rewards of Honest and Byzantine: ", (total_r_honest, total_r_byzantine))
 
     # update strategy
+    tmp = (self.proportion_of_honest * total_r_honest)/(self.proportion_of_honest * total_r_honest + (1 - self.proportion_of_honest) * total_r_byzantine);
+    probability = 1 / (1 + np.exp(-tmp));
+    print("The probability of being honest: ", probability)
     for i in range(self.num_agent):
-      # print(rewards[i], total_r_honest, total_r_bynzantine, self.proportion_of_honest);
-      self.agents[i].update_strategy(total_r_honest, total_r_bynzantine, self.proportion_of_honest);
-
+      self.agents[i].update_strategy(probability);
+    
     # update proportion_of_honest
     proportion_of_honest = sum([self.agents[i].strategy for i in range(self.num_agent)]) / self.num_agent;
     print("The proportion of honest: ", proportion_of_honest)

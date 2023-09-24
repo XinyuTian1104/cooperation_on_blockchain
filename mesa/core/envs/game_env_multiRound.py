@@ -1,5 +1,6 @@
-from game_agents import Agent
+from envs.game_agents import Agent
 import random
+import numpy as np
 
 class BFTblockchainModel():
   def __init__(self, n, R, c_check, c_send, kappa, threshold, initial_h):
@@ -32,17 +33,29 @@ class BFTblockchainModel():
     self.terminate = False;
 
   def step(self) -> None:
-    # generate proposer
-    proposer = random.randint(0, self.num_agent - 1);
-
-    # update payoff per round
-    rewards = [];
-    for i in range(self.num_agent):
-      r = self.agents[i].get_reward(self.proportion_of_honest, self.agents[proposer].strategy, self.threshold, self.R, self. c_check, self.c_send, self.kappa)
-      # print(i)
-      rewards.append(r);
+    # one step of game contains 100 rounds
+    rewards = np.array([0 for i in range(100)]);
+    for i in range(10000):
+      # generate proposer
+      proposer = random.randint(0, self.num_agent - 1);
+      # update payoff per round
+      reward = np.array([0 for i in range(self.num_agent)]);
+      for j in range(self.num_agent):
+        r = self.agents[j].get_reward(self.proportion_of_honest, self.agents[proposer].strategy, self.threshold, self.R, self. c_check, self.c_send, self.kappa)
+        reward[j] = r;
+      rewards = rewards + reward;
+    rewards = rewards / 10000;
     print("The rewards of the agents: ", rewards)
-    # rewards = [self.agents[i].get_reward() for i in range(self.num_agent)];
+
+    # # generate proposer
+    # proposer = random.randint(0, self.num_agent - 1);
+
+    # # update payoff per round
+    # rewards = [];
+    # for i in range(self.num_agent):
+    #   r = self.agents[i].get_reward(self.proportion_of_honest, self.agents[proposer].strategy, self.threshold, self.R, self. c_check, self.c_send, self.kappa)
+    #   rewards.append(r);
+    # print("The rewards of the agents: ", rewards)
 
     # NEW ROUND: new choice of strategy, update proportion_of_honest
     self.counter = self.counter + 1;
@@ -52,13 +65,15 @@ class BFTblockchainModel():
     total_r_honest = sum([rewards[i] for i in range(self.num_agent) if self.agents[i].strategy == 0]);
 
     # calculate total reward of Byzantine agents
-    total_r_bynzantine = sum([rewards[i] for i in range(self.num_agent) if self.agents[i].strategy == 1]);
-    print("The total rewards of Honest and Byzantine: ", (total_r_honest, total_r_bynzantine))
+    total_r_byzantine = sum([rewards[i] for i in range(self.num_agent) if self.agents[i].strategy == 1]);
+    print("The total rewards of Honest and Byzantine: ", (total_r_honest, total_r_byzantine))
 
     # update strategy
+    tmp = (self.proportion_of_honest * total_r_honest)/(self.proportion_of_honest * total_r_honest + (1 - proportion_of_honest) * total_r_byzantine);
+    probability = 1 / (1 + np.exp(-tmp));
+    print("The probability of being honest: ", probability)
     for i in range(self.num_agent):
-      # print(rewards[i], total_r_honest, total_r_bynzantine, self.proportion_of_honest);
-      self.agents[i].update_strategy(total_r_honest, total_r_bynzantine, self.proportion_of_honest);
+      self.agents[i].update_strategy(probability);
 
     # update proportion_of_honest
     proportion_of_honest = sum([self.agents[i].strategy for i in range(self.num_agent)]) / self.num_agent;
@@ -66,9 +81,10 @@ class BFTblockchainModel():
 
     # terminate if any equlibrium is reached
     if self.proportion_of_honest == proportion_of_honest:
-      # self.proportion_of_honest = proportion_of_honest;
       self.terminate = True;
       print("TERMINATED! The final proportion of honest is: ", proportion_of_honest, "The total rounds of game is: ", self.counter)
     else:
       self.proportion_of_honest = proportion_of_honest;
+    
+    # self.proportion_of_honest = proportion_of_honest;
     return self.counter, proportion_of_honest, self.terminate

@@ -88,7 +88,7 @@ class Agent():
 
     return reward
 
-  def update_strategy(self, total_r_honest, total_r_byzantine, proportion_of_honest) -> None:
+  def update_strategy(self, probability) -> None:
     """
         Strategy Update Rule:
             For agent i, the probability of being honest is
@@ -98,8 +98,9 @@ class Agent():
          Update:
             Now we use logistic function to update the strategy.
     """
-    proportion = (proportion_of_honest * total_r_honest)/(proportion_of_honest * total_r_honest + (1 - proportion_of_honest) * total_r_byzantine);
-    probability = 1 / (1 + np.exp(-proportion));
+   #  proportion = (proportion_of_honest * total_r_honest)/(proportion_of_honest * total_r_honest + (1 - proportion_of_honest) * total_r_byzantine);
+   #  probability = 1 / (1 + np.exp(-proportion));
+   #  print("The probability of being honest: ", probability)
     if random.random() <= probability:
       self.strategy = 0;
     else:

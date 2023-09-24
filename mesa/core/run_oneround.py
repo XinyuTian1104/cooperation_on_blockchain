@@ -8,8 +8,7 @@ if __name__ == '__main__':
     model.setup();
     print("Model setup: ", model.counter)
     while model.terminate == False:
-        # print("The model status: ", model)
-        model.step();
         print("not terminated")
+        model.step();
         x_list.append(model.proportion_of_honest);
         step_list.append(model.counter);
