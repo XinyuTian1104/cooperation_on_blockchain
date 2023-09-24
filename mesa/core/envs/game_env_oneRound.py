@@ -1,4 +1,4 @@
-from game_agents import Agent
+from envs.game_agents import Agent
 import random
 
 class BFTblockchainModel():
