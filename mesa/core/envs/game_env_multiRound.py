@@ -35,7 +35,7 @@ class BFTblockchainModel():
   def step(self) -> None:
     # one step of game contains 100 rounds
     rewards = np.array([0 for i in range(100)]);
-    for i in range(10000):
+    for i in range(100000):
       # generate proposer
       proposer = random.randint(0, self.num_agent - 1);
       # update payoff per round
@@ -44,18 +44,8 @@ class BFTblockchainModel():
         r = self.agents[j].get_reward(self.proportion_of_honest, self.agents[proposer].strategy, self.threshold, self.R, self. c_check, self.c_send, self.kappa)
         reward[j] = r;
       rewards = rewards + reward;
-    rewards = rewards / 10000;
+    rewards = rewards / 100000;
     print("The rewards of the agents: ", rewards)
-
-    # # generate proposer
-    # proposer = random.randint(0, self.num_agent - 1);
-
-    # # update payoff per round
-    # rewards = [];
-    # for i in range(self.num_agent):
-    #   r = self.agents[i].get_reward(self.proportion_of_honest, self.agents[proposer].strategy, self.threshold, self.R, self. c_check, self.c_send, self.kappa)
-    #   rewards.append(r);
-    # print("The rewards of the agents: ", rewards)
 
     # NEW ROUND: new choice of strategy, update proportion_of_honest
     self.counter = self.counter + 1;
@@ -71,7 +61,7 @@ class BFTblockchainModel():
     # update strategy
     tmp = (self.proportion_of_honest * total_r_honest)/(self.proportion_of_honest * total_r_honest + (1 - self.proportion_of_honest) * total_r_byzantine);
     print("tmp: ", tmp)
-    probability = 1 / (1 + np.exp(-tmp));
+    probability = 1 / (1 + np.exp(-(tmp-0.5)*10));
     print("The probability of being honest: ", probability)
     for i in range(self.num_agent):
       self.agents[i].update_strategy(probability);
