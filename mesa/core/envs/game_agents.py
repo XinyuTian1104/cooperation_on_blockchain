@@ -94,8 +94,12 @@ class Agent():
             For agent i, the probability of being honest is
                 x_i(t+1) = x_i(t) * sum_u_honest / (x_i(t) * sum_u_honest + (1-x_i(t)) * sum_u_byzantine)
             the probability of being Byzantine is 1 - x_i(t+1)
+         
+         Update:
+            Now we use logistic function to update the strategy.
     """
-    probability = (proportion_of_honest * total_r_honest)/(proportion_of_honest * total_r_honest + (1 - proportion_of_honest) * total_r_byzantine);
+    proportion = (proportion_of_honest * total_r_honest)/(proportion_of_honest * total_r_honest + (1 - proportion_of_honest) * total_r_byzantine);
+    probability = 1 / (1 + np.exp(-proportion));
     if random.random() <= probability:
       self.strategy = 0;
     else:
