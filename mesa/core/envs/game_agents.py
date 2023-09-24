@@ -4,21 +4,20 @@ import random
 
 class Agent():
 
-  def __init__(self, strategy, reward) -> None:
+  def __init__(self, strategy) -> None:
     super().__init__()
     self.strategy = strategy;
-    self.reward = reward;
-  
+
   def get_reward(self, proportion_of_honest, proposer_strategy, threshold, R, c_check, c_send, kappa) -> None:
     """
         If Byzantine majority:
-            If Honest majority, then V_{HH} = R-c_{check}-c_{send}, 
-                                V_{HB} = -c_{check}-k, 
-                                V_{BH} = -c_{check}, 
+            If Honest majority, then V_{HH} = R-c_{check}-c_{send},
+                                V_{HB} = -c_{check}-k,
+                                V_{BH} = -c_{check},
                                 V_{BB} = R-c_{check}-c_{send};
-            If Honest minority, then V_{HH} = 0, 
-                                V_{HB} = -k, 
-                                V_{BH} = -c_{check}, 
+            If Honest minority, then V_{HH} = 0,
+                                V_{HB} = -k,
+                                V_{BH} = -c_{check},
                                 V_{BB} = R-c_{check}-c_{send};
         If Byzantine minority:
             If Honest majority, then V_{HH} = R-c_{check}-c_{send},
@@ -84,27 +83,11 @@ class Agent():
                 raise ValueError;
         elif proportion_of_honest < threshold: # Honest minority
             reward = 0;
-            # if proposer_strategy == 0: # Honest proposer
-            #     if self.strategy == 0: # Honest agent, {HH}
-            #        reward = 0;
-            #     elif self.strategy == 1: # Byzantine agent, {BH}
-            #        reward = 0;
-            #     else:
-            #        raise ValueError;
-            # elif proposer_strategy == 1: # Byzantine proposer
-            #     if self.strategy == 0: # Honest agent, {HB}
-            #        reward = 0;
-            #     elif self.strategy == 1: # Byzantine agent, {BB}
-            #        reward = 0;
-            #     else:
-            #        raise ValueError;
-            # else:
-            #     raise ValueError;
         else:
             raise ValueError;
-    
+
     return reward
-    
+
   def update_strategy(self, total_r_honest, total_r_byzantine, proportion_of_honest) -> None:
     """
         Strategy Update Rule:
@@ -114,10 +97,12 @@ class Agent():
     """
     probability = (proportion_of_honest * total_r_honest)/(proportion_of_honest * total_r_honest + (1 - proportion_of_honest) * total_r_byzantine);
     if random.random() <= probability:
-      strategy = 0; 
+      self.strategy = 0;
     else:
-      strategy = 1;
+      self.strategy = 1;
 
-    return strategy
+    # return strategy
+
+
 
   
