@@ -99,15 +99,11 @@ class Agent():
          Update:
             Now we use logistic function to update the strategy.
     """
-   #  proportion = (proportion_of_honest * total_r_honest)/(proportion_of_honest * total_r_honest + (1 - proportion_of_honest) * total_r_byzantine);
-   #  probability = 1 / (1 + np.exp(-proportion));
-   #  print("The probability of being honest: ", probability)
-    if np.random.rand() <= probability:
+    random_number = np.random.rand();
+    if random_number <= probability:
       self.strategy = 0;
     else:
       self.strategy = 1;
-
-    # return strategy
 
 
 

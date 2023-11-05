@@ -1,5 +1,5 @@
 from envs.game_agents import Agent
-# import random
+import random
 import numpy as np
 
 np.random.seed(2023)
@@ -17,7 +17,7 @@ class BFTblockchainModel():
     self.proportion_of_honest = initial_h;
     self.counter = 0;
     self.terminate = False;
-    self.rewards = np.array([0 for i in range(n)]);
+    # self.rewards = np.array([0 for i in range(n)]);
     self.r_honest_at_round = [];
     self.r_byzantine_at_round = [];
 
@@ -40,8 +40,10 @@ class BFTblockchainModel():
   def step(self) -> None:
     rewards = np.array([0 for i in range(self.num_agent)]);
     for i in range(1000):
+
       # generate proposer
       proposer = np.random.randint(0, self.num_agent);
+
       # update payoff per round
       reward = np.array([0 for i in range(self.num_agent)]);
       for j in range(self.num_agent):
@@ -77,10 +79,10 @@ class BFTblockchainModel():
     print("The proportion of honest: ", proportion_of_honest)
 
     # terminate if any equlibrium is reached
-    if self.proportion_of_honest == proportion_of_honest:
-      self.terminate = True;
-      print("TERMINATED! The final proportion of honest is: ", self.proportion_of_honest, "The total rounds of game is: ", self.counter)
-    elif tmp == 1:
+    # if self.proportion_of_honest == proportion_of_honest:
+    #   self.terminate = True;
+    #   print("TERMINATED! The final proportion of honest is: ", self.proportion_of_honest, "The total rounds of game is: ", self.counter)
+    if tmp == 1:
       self.terminate = True;
       self.proportion_of_honest = 1;
       print("TERMINATED! The final proportion of honest is: ", self.proportion_of_honest, "The total rounds of game is: ", self.counter)
