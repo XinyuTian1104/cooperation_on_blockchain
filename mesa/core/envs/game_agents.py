@@ -1,5 +1,6 @@
 import numpy as np
-import random
+# import random
+np.random.seed(2023)
 # from game_env import BFTblockchainModel
 
 class Agent():
@@ -101,7 +102,7 @@ class Agent():
    #  proportion = (proportion_of_honest * total_r_honest)/(proportion_of_honest * total_r_honest + (1 - proportion_of_honest) * total_r_byzantine);
    #  probability = 1 / (1 + np.exp(-proportion));
    #  print("The probability of being honest: ", probability)
-    if random.random() <= probability:
+    if np.random.rand() <= probability:
       self.strategy = 0;
     else:
       self.strategy = 1;
